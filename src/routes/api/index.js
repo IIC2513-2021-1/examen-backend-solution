@@ -1,4 +1,5 @@
 const KoaRouter = require('koa-router');
+const auth = require('./auth');
 
 const router = new KoaRouter();
 
@@ -9,5 +10,7 @@ router.get('api.base', '/', async (ctx) => {
     usersCount,
   };
 });
+
+router.use('/auth', auth.routes());
 
 module.exports = router;
