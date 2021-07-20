@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const path = require('path');
 const Koa = require('koa');
 const koaBody = require('koa-body');
@@ -6,6 +8,7 @@ const koaFlashMessage = require('koa-flash-message').default;
 const koaStatic = require('koa-static');
 const render = require('koa-ejs');
 const session = require('koa-session');
+const cors = require('@koa/cors');
 const override = require('koa-override-method');
 const assets = require('./assets');
 const mailer = require('./mailers');
@@ -31,6 +34,9 @@ app.context.orm = orm;
 /**
  * Middlewares
  */
+
+// CORS
+app.use(cors({ origin: process.env.ORIGIN || 'http://localhost:8000' }));
 
 // expose running mode in ctx.state
 app.use((ctx, next) => {
