@@ -2,7 +2,7 @@ require('dotenv').config();
 
 const KoaRouter = require('koa-router');
 const jwtgenerator = require('jsonwebtoken');
-const { QueryTypes } = require('sequelize');
+// const { QueryTypes } = require('sequelize');
 
 const router = new KoaRouter();
 
@@ -24,15 +24,17 @@ function generateToken(user) {
 
 router.post('api.auth.login', '/', async (ctx) => {
   const { email, password } = ctx.request.body;
-  const [userRecord] = await ctx.orm.sequelize.query(
-    "SELECT * from users WHERE email = '" + email + "'", // eslint-disable-line prefer-template
-    {
-      type: QueryTypes.SELECT,
-    },
-  );
+  // const [userRecord] = await ctx.orm.sequelize.query(
+  //   "SELECT * from users WHERE email = '" + email + "'", // eslint-disable-line prefer-template
+  //   {
+  //     type: QueryTypes.SELECT,
+  //   },
+  // );
 
-  if (!userRecord) ctx.throw(404, `No user found with ${email}`);
-  const user = await ctx.orm.user.findByPk(userRecord.id);
+  // if (!userRecord) ctx.throw(404, `No user found with ${email}`);
+  // const user = await ctx.orm.user.findByPk(userRecord.id);
+  const user = await ctx.orm.user.findOne({ where: { email } });
+  if (!user) ctx.throw(404, `No user found with ${email}`);
   const authenticated = await user.checkPassword(password);
   if (!authenticated) ctx.throw(401, 'Invalid password');
 
